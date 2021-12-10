@@ -267,6 +267,16 @@ public interface MicroCListener extends ParseTreeListener {
 	 */
 	void exitWhile_stmt(MicroCParser.While_stmtContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MicroCParser#cast_expr}.
+	 * @param ctx the parse tree
+	 */
+	void enterCast_expr(MicroCParser.Cast_exprContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MicroCParser#cast_expr}.
+	 * @param ctx the parse tree
+	 */
+	void exitCast_expr(MicroCParser.Cast_exprContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MicroCParser#lval}.
 	 * @param ctx the parse tree
 	 */

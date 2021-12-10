@@ -25,6 +25,7 @@ public abstract class Instruction {
 		GETI("GETI"),
 		HALT("HALT"),
 		ADDI("ADDI"),
+		FMOVIS("FMOVI.S"),	// STEP 7 edit
 		/* BRANCH INSTRUCTIONS */
 		BEQ("BEQ"),
 		BGE("BGE"),
@@ -48,6 +49,7 @@ public abstract class Instruction {
 		FLT("FLT.S"),
 		FLE("FLE.S"),
 		FEQ("FEQ.S"),
+		IMOVFS("IMOVF.S"),	// STEP 7 edit
 		/* FUNCTION CALL AND RETURN */
 		JR("JR"),
 		RET("RET"),

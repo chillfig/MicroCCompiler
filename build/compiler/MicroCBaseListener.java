@@ -325,6 +325,18 @@ public class MicroCBaseListener implements MicroCListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterCast_expr(MicroCParser.Cast_exprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitCast_expr(MicroCParser.Cast_exprContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterLval(MicroCParser.LvalContext ctx) { }
 	/**
 	 * {@inheritDoc}
