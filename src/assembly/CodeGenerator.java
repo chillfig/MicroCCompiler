@@ -1224,9 +1224,6 @@ public class CodeGenerator extends AbstractASTVisitor<CodeObject> {
 		}
 		co.code.addAll(expr.code);
 		
-		//node.getCastType(); 	// THIS IS THE TYPE YOU WANT TO CAST TO
-		//expr.getType();		// THIS IS THE CURRENT TYPE
-
 		// Step 2::Convert	
 		Instruction hardConvert = null;
 		/* If you cast float to int
