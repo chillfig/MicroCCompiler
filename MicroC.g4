@@ -56,7 +56,9 @@ str_decl : 'string' id '=' val= STR_LITERAL ';' {st.addVariable(new Scope.Type(S
 type returns [Scope.Type t] : base_type {$t = $base_type.t;}
           | t1=type '*' {$t = Scope.Type.pointerToType($t1.t);};
 
-base_type returns [Scope.Type t]: 'int' {$t = new Scope.Type(Scope.InnerType.INT);}| 'float' {$t = new Scope.Type(Scope.InnerType.FLOAT);};
+base_type returns [Scope.Type t]: 'int' {$t = new Scope.Type(Scope.InnerType.INT);}
+          | 'float' {$t = new Scope.Type(Scope.InnerType.FLOAT);}
+          | 'void' {$t = new Scope.Type(Scope.InnerType.VOID);}; // STEP 7 edit, option 1
 
 func_type returns [Scope.Type t]: type {$t = $type.t;}
           | 'void' {$t = new Scope.Type(Scope.InnerType.VOID);};
@@ -148,10 +150,13 @@ while_stmt returns [WhileNode node] : 'while' '(' cond ')' '{' statements '}' {$
 	 
 /* Expressions */
 
+cast_expr returns [CastExprNode node] : '(' type ')' expr {$node = new CastExprNode($expr.node, $type.t);};   // STEP 7 edit
+
 lval returns [ExpressionNode node] : id {$node = new VarNode($id.text);}
         | ptr_expr {$node = $ptr_expr.node;};
 
 primary returns [ExpressionNode node] : lval {$node = $lval.node;}
+        | cast_expr {$node = $cast_expr.node;}    // STEP 7 edit
         | addr_of_expr {$node = $addr_of_expr.node;}
         | '(' expr ')' {$node = $expr.node;}
         | unaryminus_expr {$node = $unaryminus_expr.node;}

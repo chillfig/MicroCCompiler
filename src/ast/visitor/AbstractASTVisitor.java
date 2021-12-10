@@ -7,6 +7,7 @@ import ast.ASTNode;
 import ast.AddrOfNode;
 import ast.AssignNode;
 import ast.BinaryOpNode;
+import ast.CastExprNode;	//STEP 7 edit
 import ast.CallNode;
 import ast.IfStatementNode;
 import ast.WhileNode;
@@ -80,6 +81,13 @@ public abstract class AbstractASTVisitor<R> implements ASTVisitor<R> {
 		R left = node.getLeft().accept(this);
 		R right = node.getRight().accept(this);
 		return postprocess(node, left, right);
+	}
+
+	@Override	// STEP 7 edit
+	public R visit(CastExprNode node) {
+		preprocess(node);
+		R expr = node.getExpr().accept(this);
+		return postprocess(node, expr);
 	}
 
 	@Override
@@ -237,6 +245,10 @@ public abstract class AbstractASTVisitor<R> implements ASTVisitor<R> {
 		return null;
 	}
 
+	protected R postprocess(CastExprNode node, R expr) {	// STEP 7 edit
+		return null;
+	}
+
 	protected R postprocess(UnaryOpNode node, R expr) {
 		return null;
 	}
@@ -314,6 +326,10 @@ public abstract class AbstractASTVisitor<R> implements ASTVisitor<R> {
 	}
 
 	protected void preprocess(BinaryOpNode node) {
+		return;
+	}
+
+	protected void preprocess(CastExprNode node) {	// STEP 7 edit
 		return;
 	}
 

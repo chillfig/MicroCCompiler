@@ -143,6 +143,20 @@ public class CodeGenerator extends AbstractASTVisitor<CodeObject> {
 		// Step 2
 		co.code.addAll(right.code);
 
+		// STEP 7 option 2:: check for implicit converisons
+		Instruction implicitConvert = null;
+		if (left.getType().type == Scope.InnerType.INT && right.getType().type == Scope.InnerType.FLOAT){
+			implicitConvert = new Imovfs(left.temp, generateTemp(Scope.InnerType.FLOAT));
+			co.code.add(implicitConvert);
+			left.temp = co.code.getLast().getDest();
+			left.type = new Scope.Type(Scope.InnerType.FLOAT);
+		}else if (left.getType().type == Scope.InnerType.FLOAT && right.getType().type == Scope.InnerType.INT){
+			implicitConvert = new Imovfs(right.temp, generateTemp(Scope.InnerType.FLOAT));
+			co.code.add(implicitConvert);
+			right.temp = co.code.getLast().getDest();			
+			right.type = new Scope.Type(Scope.InnerType.FLOAT);
+		}
+		
 		// Step 3
 		Instruction ins = null;
 		switch (node.getOp()){
@@ -194,7 +208,7 @@ public class CodeGenerator extends AbstractASTVisitor<CodeObject> {
 		co.code.add(ins);			//add this instruction to the code object
 		co.lval = false;			//co holds an rval -- data
 		co.temp = ins.getDest();	//temp is in destination of li
-		co.type = node.getType();
+		co.type = left.getType();
 		/* FILL IN FROM STEP 2 */
 
 		return co;
@@ -286,6 +300,19 @@ public class CodeGenerator extends AbstractASTVisitor<CodeObject> {
 		//Step 2 
 		co.code.addAll(right.code);
 		
+		// STEP 7 option 2:: check for implicit converisons
+		Instruction implicitConvert = null;
+		if (left.getType().type == Scope.InnerType.INT && right.getType().type == Scope.InnerType.FLOAT){
+			implicitConvert = new Fmovis(right.temp, generateTemp(Scope.InnerType.INT));
+			co.code.add(implicitConvert);
+			right.temp = co.code.getLast().getDest();
+		}else if (left.getType().type == Scope.InnerType.FLOAT && right.getType().type == Scope.InnerType.INT){
+			implicitConvert = new Imovfs(right.temp, generateTemp(Scope.InnerType.FLOAT));
+			co.code.add(implicitConvert);
+			right.temp = co.code.getLast().getDest();
+		}
+		
+
 		//Step 3
 		if (left.getType().type == Scope.InnerType.INT || left.getType().type == Scope.InnerType.PTR){
 			ins = new Sw(right.temp, left.temp, "0");
@@ -1174,6 +1201,53 @@ public class CodeGenerator extends AbstractASTVisitor<CodeObject> {
 		co.type = expr.getType();
 		co.lval = false;
 		co.temp = expr.temp;
+
+		return co;
+	}
+
+	/**
+	 * Generate code for cast
+	 * 
+	 *
+	 * 
+	 *
+	 * 
+	 * 
+	 */
+	@Override
+	protected CodeObject postprocess(CastExprNode node, CodeObject expr) {
+		CodeObject co = new CodeObject();
+		
+		// Step 1::Rvalify
+		if (expr.lval == true){
+			expr = rvalify(expr);
+		}
+		co.code.addAll(expr.code);
+		
+		//node.getCastType(); 	// THIS IS THE TYPE YOU WANT TO CAST TO
+		//expr.getType();		// THIS IS THE CURRENT TYPE
+
+		// Step 2::Convert	
+		Instruction hardConvert = null;
+		/* If you cast float to int
+		float x;
+		(int) x;
+		*/
+		if (expr.getType().type == Scope.InnerType.FLOAT && node.getCastType().type == Scope.InnerType.INT){
+			hardConvert = new Fmovis(expr.temp, generateTemp(Scope.InnerType.INT));
+			co.code.add(hardConvert);
+		}/* If you cast int to float
+		int x;
+		(float) x;
+		*/
+		else if(expr.getType().type == Scope.InnerType.FLOAT && node.getCastType().type == Scope.InnerType.INT){
+			hardConvert = new Imovfs(expr.temp, generateTemp(Scope.InnerType.FLOAT));
+			co.code.add(hardConvert);
+		}
+		
+		co.type = node.getCastType();
+		co.lval = false;
+		co.temp = co.code.getLast().getDest();
 
 		return co;
 	}

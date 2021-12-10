@@ -6,6 +6,7 @@ import ast.ASTNode;
 import ast.AddrOfNode;
 import ast.AssignNode;
 import ast.BinaryOpNode;
+import ast.CastExprNode;	// STEP 7 edit
 import ast.CallNode;
 import ast.WhileNode;
 import ast.IfStatementNode;
@@ -65,6 +66,19 @@ public class PrintVisitor extends AbstractASTVisitor<Void> {
 		return null;
 	}
 	
+	@Override	// STEP 7 edit
+	protected void preprocess(CastExprNode node) {
+		printTabs();
+		System.out.println("CastExprNode: " + node.getCastType());
+		depth++;
+	}
+
+	@Override // STEP 7 edit
+	protected Void postprocess(CastExprNode node, Void expr) {
+		--depth;
+		return null;
+	}
+
 	@Override
 	protected void preprocess(AssignNode node) {
 		printTabs();

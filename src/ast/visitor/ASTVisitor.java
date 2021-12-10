@@ -10,6 +10,7 @@ public interface ASTVisitor<R> {
 	R visit(IntLitNode node);
 	R visit(FloatLitNode node);
 	R visit(BinaryOpNode node);
+	R visit(CastExprNode node);	// STEP 7 edit
 	R visit(UnaryOpNode node);
 	R visit(AssignNode node);
 	R visit(StatementListNode node);
