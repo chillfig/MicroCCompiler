@@ -1237,7 +1237,7 @@ public class CodeGenerator extends AbstractASTVisitor<CodeObject> {
 		int x;
 		(float) x;
 		*/
-		else if(expr.getType().type == Scope.InnerType.FLOAT && node.getCastType().type == Scope.InnerType.INT){
+		else if(expr.getType().type == Scope.InnerType.INT && node.getCastType().type == Scope.InnerType.FLOAT){
 			hardConvert = new Imovfs(expr.temp, generateTemp(Scope.InnerType.FLOAT));
 			co.code.add(hardConvert);
 		}
